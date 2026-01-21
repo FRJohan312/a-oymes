@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Álbum de Aniversario</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --soft-pink: #FFB6C1;
+            --deep-burgundy: #8B0000;
+            --soft-cream: #FFF8DC;
+            --gradient-romantic: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .card h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--deep-burgundy);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--deep-burgundy);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--gradient-romantic);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--primary-gold);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .status {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+
+        .preview {
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--soft-cream);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-gold);
+        }
+
+        .preview-label {
+            font-size: 0.9rem;
+            color: var(--deep-burgundy);
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .preview-content {
+            font-size: 1.1rem;
+            color: var(--deep-burgundy);
+            font-weight: 500;
+        }
+
+        /* Accordion Styles */
+        .accordion-group {
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .accordion-header {
+            padding: 15px 20px;
+            background: #fdfbf7;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+            user-select: none;
+            border-bottom: 1px solid #eee;
+        }
+
+        .accordion-header:hover {
+            background: #fff5f7;
+        }
+
+        .accordion-header h4 {
+            margin: 0;
+            color: var(--deep-burgundy);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .accordion-header .arrow {
+            transition: transform 0.3s ease;
+            color: var(--deep-burgundy);
+            opacity: 0.6;
+        }
+
+        .accordion-group.active .accordion-header .arrow {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            content-visibility: auto;
+            contain-intrinsic-size: 0 200px;
+        }
+
+        .accordion-group.active .accordion-content {
+            display: block;
+        }
+
+        .image-preview {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #eee;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .image-preview .delete-btn:hover {
+            background: #ff4d4d;
+            transform: scale(1.1);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-gold);
+        }
+
+        .info-box p {
+            margin: 0;
+            color: var(--deep-burgundy);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Panel de Administración</h1>
+            <p>Configura todos los detalles del álbum de aniversario</p>
+        </div>
+
+        <div class="info-box">
+            <p><strong>ℹ️ Nota:</strong> Todos los cambios se guardan automáticamente y se reflejarán en la página
+                principal (index.html) que verá ella.</p>
+        </div>
+
+        <!-- Relationship Configuration -->
+        <div class="card">
+            <h2>⏱️ Configuración de la Relación</h2>
+            <div class="form-group">
+                <label for="relationshipStartDate">Fecha y hora de inicio de la relación:</label>
+                <input type="datetime-local" id="relationshipStartDate">
+            </div>
+            <button class="btn btn-primary" id="saveStartDate">💾 Guardar Fecha</button>
+            <div id="dateStatus" class="status"></div>
+            <div class="preview" id="datePreview" style="display: none;">
+                <div class="preview-label">Vista previa del contador:</div>
+                <div class="preview-content" id="datePreviewContent"></div>
+            </div>
+        </div>
+
+        <!-- Victory Message Configuration -->
+        <div class="card">
+            <h2>🏆 Mensaje de Victoria del Juego</h2>
+            <div class="form-group">
+                <label for="victoryMessage">Mensaje que aparecerá al ganar el juego secreto:</label>
+                <textarea id="victoryMessage" placeholder="Escribe un mensaje romántico..."></textarea>
+            </div>
+            <button class="btn btn-primary" id="saveVictoryMessage">💾 Guardar Mensaje</button>
+            <div id="messageStatus" class="status"></div>
+            <div class="preview">
+                <div class="preview-label">Mensaje predeterminado:</div>
+                <div class="preview-content">¡Ganaste, mi amor! Cada momento contigo es una victoria ❤️</div>
+            </div>
+        </div>
+
+        <!-- Music Configuration (SoundCloud Playlist) -->
+        <div class="card">
+            <h2>🎵 Gestión de Playlist (SoundCloud)</h2>
+            <div class="info-box"
+                style="background: rgba(255, 127, 80, 0.1); border-left: 4px solid #ff7700; margin-bottom: 20px;">
+                <p style="font-size: 0.9rem;">Añade múltiples enlaces de SoundCloud para crear tu lista de reproducción
+                    personalizada.
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="trackUrl">Nueva Canción (Enlace):</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="trackUrl" placeholder="https://soundcloud.com/..." style="flex: 1;">
+                    <button class="btn btn-primary" id="addTrack" style="width: auto; padding: 0 20px;">➕
+                        Añadir</button>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 20px; font-size: 1rem; color: var(--deep-burgundy);">Canciones en la lista:</h3>
+            <div id="playlistContainer" style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                <!-- Lista de canciones dinámica -->
+            </div>
+
+            <div id="musicStatus" class="status" style="margin-top: 15px;"></div>
+        </div>
+
+        <!-- Photo Management -->
+        <div class="card">
+            <h2>📸 Gestión de Fotos (Modo Deploy)</h2>
+            <div class="info-box"
+                style="background: rgba(102, 126, 234, 0.1); border-left: 4px solid #667eea; margin-bottom: 20px;">
+                <p><strong>🚀 Cómo publicar tus fotos para ella:</strong></p>
+                <ol style="margin-left: 20px; font-size: 0.9rem; margin-top: 8px;">
+                    <li>Copia tus fotos a la carpeta <code>/img/</code> del proyecto.</li>
+                    <li>Nombra tus fotos empezando por la fecha (ej: <code>2025-12-24_loquequieras.jpg</code>) para que
+                        se agrupen automáticamente.</li>
+                    <li>Ejecuta el comando <code>node sync.js</code> en tu terminal para actualizar la lista.</li>
+                    <li>Sube los cambios a Git y publica tu sitio.</li>
+                </ol>
+            </div>
+
+            <div
+                style="margin-bottom: 20px; padding: 15px; background: #fff8dc; border-radius: 12px; border: 1px dashed var(--primary-gold);">
+                <p style="font-size: 0.85rem; color: #856404;"><strong>Nota:</strong> Las fotos que agregues aquí abajo
+                    solo las verás tú. Para que ella las vea, debes seguir los pasos de arriba.</p>
+            </div>
+            <div class="form-group">
+                <label for="photoUpload">Seleccionar fotos (puedes elegir varias):</label>
+                <input type="file" id="photoUpload" accept="image/*" multiple>
+            </div>
+            <div class="form-group">
+                <label for="photoDate">Fecha de la foto:</label>
+                <input type="date" id="photoDate">
+            </div>
+            <button class="btn btn-secondary" id="addPhoto">➕ Agregar Foto</button>
+            <div id="photoStatus" class="status"></div>
+
+            <h3 style="margin-top: 30px; margin-bottom: 16px; color: var(--deep-burgundy);">Fotos actuales:</h3>
+            <div class="images-grid" id="imagesGrid">
+                <p style="color: #666; grid-column: 1/-1; text-align: center;">No hay fotos agregadas aún</p>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <h2>⚡ Acciones Rápidas</h2>
+            <div class="quick-actions">
+                <button class="btn btn-secondary" id="viewMainPage">👁️ Ver Página Principal</button>
+                <button class="btn btn-primary" id="exportConfig">📥 Exportar Configuración</button>
+                <button class="btn btn-danger" id="clearAll">🗑️ Limpiar Todo</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="images-data.js"></script>
+    <script>
+        const STORAGE_KEYS = {
+            startDate: 'relationship_start_date',
+            victoryMessage: 'anniversary_victory_message',
+            images: 'anniversary_images',
+            playlist: 'anniversary_playlist'
+        };
+
+        // Load initial data
+        async function loadConfig() {
+            // Priority: APP_IMAGES_DATA (from server/code) > LocalStorage
+            const serverData = window.APP_IMAGES_DATA?.settings || {};
+
+            // 1. Start Date
+            const startDate = serverData.startDate || localStorage.getItem(STORAGE_KEYS.startDate);
+            if (startDate) {
+                document.getElementById('relationshipStartDate').value = startDate;
+                updateDatePreview();
+            }
+
+            // 2. Victory Message
+            const victoryMsg = serverData.victoryMessage || localStorage.getItem(STORAGE_KEYS.victoryMessage);
+            if (victoryMsg) {
+                document.getElementById('victoryMessage').value = victoryMsg;
+            }
+
+            // 3. Playlist
+            const playlist = serverData.playlist || JSON.parse(localStorage.getItem('anniversary_playlist') || '[]');
+            appPlaylist = playlist;
+            renderPlaylist();
+
+            // 4. Photos
+            loadImages();
+        }
+
+        // --- Save Functions ---
+
+        async function saveToServer(key, value) {
+            try {
+                const payload = {};
+                payload[key] = value;
+                const res = await fetch('http://localhost:3000/save-settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                return res.ok;
+            } catch (e) {
+                console.error('Error saving to server:', e);
+                return false;
+            }
+        }
+
+        // Save Start Date
+        document.getElementById('saveStartDate').addEventListener('click', async () => {
+            const dateValue = document.getElementById('relationshipStartDate').value;
+            if (!dateValue) {
+                showStatus('dateStatus', 'Selecciona una fecha', 'error');
+                return;
+            }
+            localStorage.setItem(STORAGE_KEYS.startDate, dateValue);
+            const synced = await saveToServer('startDate', dateValue);
+            const msg = synced ? '✅ Guardado en el CÓDIGO y localmente.' : '✅ Guardado localmente.';
+            showStatus('dateStatus', msg, 'success');
+            updateDatePreview();
+        });
+
+        // Save Victory Message
+        document.getElementById('saveVictoryMessage').addEventListener('click', async () => {
+            const msgValue = document.getElementById('victoryMessage').value.trim();
+            localStorage.setItem(STORAGE_KEYS.victoryMessage, msgValue);
+            const synced = await saveToServer('victoryMessage', msgValue);
+            const statusMsg = synced ? '✅ Mensaje sincronizado con el CÓDIGO.' : '✅ Mensaje guardado localmente.';
+            showStatus('messageStatus', statusMsg, 'success');
+        });
+
+        // Playlist Logic
+        let appPlaylist = [];
+
+        function renderPlaylist() {
+            const container = document.getElementById('playlistContainer');
+            if (appPlaylist.length === 0) {
+                container.innerHTML = '<p style="color: #666; font-style: italic; font-size: 0.9rem;">No hay canciones en la lista.</p>';
+                return;
+            }
+
+            container.innerHTML = appPlaylist.map((url, index) => `
+                <div style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.05);">
+                    <span style="font-size: 0.8rem; color: #666; font-family: monospace;">#${index + 1}</span>
+                    <span style="flex: 1; font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${url}</span>
+                    <button onclick="removeTrack(${index})" style="background: none; border: none; color: #ff4d4d; cursor: pointer; padding: 4px;" title="Eliminar">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        window.removeTrack = async (index) => {
+            appPlaylist.splice(index, 1);
+            localStorage.setItem(STORAGE_KEYS.playlist, JSON.stringify(appPlaylist));
+            renderPlaylist();
+            await savePlaylistToServer();
+        };
+
+        document.getElementById('addTrack').addEventListener('click', async () => {
+            const input = document.getElementById('trackUrl');
+            const url = input.value.trim();
+
+            if (!url || !url.includes('soundcloud.com')) {
+                showStatus('musicStatus', 'URL de SoundCloud no válida.', 'error');
+                return;
+            }
+
+            if (appPlaylist.includes(url)) {
+                showStatus('musicStatus', 'La canción ya está en la lista.', 'info');
+                return;
+            }
+
+            appPlaylist.push(url);
+            input.value = '';
+            localStorage.setItem(STORAGE_KEYS.playlist, JSON.stringify(appPlaylist));
+            renderPlaylist();
+            await savePlaylistToServer();
+        });
+
+        async function savePlaylistToServer() {
+            try {
+                const res = await fetch('http://localhost:3000/save-playlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(appPlaylist)
+                });
+                if (res.ok) {
+                    showStatus('musicStatus', '✅ Playlist sincronizada con el CÓDIGO.', 'success');
+                } else {
+                    showStatus('musicStatus', '✅ Guardado localmente (servidor no disponible).', 'success');
+                }
+            } catch (e) {
+                showStatus('musicStatus', '✅ Guardado localmente.', 'success');
+            }
+        }
+
+        function updateDatePreview() {
+            const dateValue = document.getElementById('relationshipStartDate').value;
+            if (!dateValue) return;
+            const startDate = new Date(dateValue + "T12:00:00");
+            const now = new Date();
+            const diff = now - startDate;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const preview = document.getElementById('datePreview');
+            const content = document.getElementById('datePreviewContent');
+            if (content) content.textContent = `${days} días de amor`;
+            if (preview) preview.style.display = 'block';
+        }
+
+        // Add photo
+        document.getElementById('addPhoto').addEventListener('click', async () => {
+            const fileInput = document.getElementById('photoUpload');
+            const dateInput = document.getElementById('photoDate');
+            const files = Array.from(fileInput.files);
+            const dateValue = dateInput.value;
+
+            if (files.length === 0) {
+                showStatus('photoStatus', 'Por favor selecciona al menos una imagen', 'error');
+                return;
+            }
+
+            if (!dateValue) {
+                showStatus('photoStatus', 'Por favor selecciona la fecha para las fotos', 'error');
+                return;
+            }
+
+            showStatus('photoStatus', `⌛ Procesando ${files.length} fotos...`, 'info');
+
+            // 1. Intentar subir al servidor local (para guardar en /img/)
+            let serverSuccess = false;
+            try {
+                const checkServer = await fetch('http://localhost:3000/ping').catch(() => null);
+                if (checkServer && checkServer.ok) {
+                    const formData = new FormData();
+                    formData.append('date', dateValue);
+                    files.forEach(file => formData.append('photos', file));
+
+                    const uploadRes = await fetch('http://localhost:3000/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (uploadRes.ok) {
+                        serverSuccess = true;
+                        showStatus('photoStatus', `✅ ${files.length} fotos guardadas automáticamente en /img/`, 'success');
+                    }
+                }
+            } catch (err) {
+                console.log('Servidor local no detectado o error al subir:', err);
+            }
+
+            // 2. Si el servidor falló o no está, usar el respaldo de localStorage (con compresión)
+            if (!serverSuccess) {
+                const images = JSON.parse(localStorage.getItem(STORAGE_KEYS.images) || '[]');
+                let count = 0;
+
+                for (const file of files) {
+                    if (!file.type.startsWith('image/')) continue;
+                    try {
+                        const originalData = await readFileAsDataURL(file);
+                        const compressedData = await compressImage(originalData, 1200, 0.7);
+                        images.push({ src: compressedData, date: dateValue });
+                        count++;
+                    } catch (err) { console.error('Error procesando:', err); }
+                }
+
+                try {
+                    localStorage.setItem(STORAGE_KEYS.images, JSON.stringify(images));
+                    if (count > 0) {
+                        showStatus('photoStatus', `✅ ${count} fotos guardadas en memoria local (Servidor no activo)`, 'success');
+                    }
+                } catch (err) {
+                    showStatus('photoStatus', '❌ Almacenamiento lleno y servidor no activo.', 'error');
+                }
+            }
+
+            loadImages();
+            fileInput.value = '';
+        });
+
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function compressImage(base64Str, maxWidth, quality) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = base64Str;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxWidth) {
+                        height = (maxWidth / width) * height;
+                        width = maxWidth;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Convertir a JPEG con calidad reducida
+                    resolve(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.onerror = (e) => reject(e);
+            });
+        }
+
+        // Load images
+        function loadImages() {
+            const staticImages = (window.APP_IMAGES_DATA || []).map(img => ({ ...img, type: 'server' }));
+            const localImages = (JSON.parse(localStorage.getItem(STORAGE_KEYS.images) || '[]')).map((img, index) => ({
+                ...img,
+                type: 'local',
+                originalIndex: index
+            }));
+
+            const allImages = [...staticImages, ...localImages];
+            const grid = document.getElementById('imagesGrid');
+
+            if (allImages.length === 0) {
+                grid.innerHTML = '<p style="color: #666; grid-column: 1/-1; text-align: center;">No hay fotos agregadas aún</p>';
+                return;
+            }
+
+            const grouped = allImages.reduce((acc, img) => {
+                const date = img.date || 'Sin fecha';
+                if (!acc[date]) acc[date] = [];
+                acc[date].push(img);
+                return acc;
+            }, {});
+
+            const sortedDates = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+
+            grid.style.display = 'block';
+            grid.innerHTML = sortedDates.map((date, idx) => {
+                const formattedDate = date !== 'Sin fecha' ? new Date(date + 'T12:00:00').toLocaleDateString('es-ES') : date;
+                const photosCount = grouped[date].length;
+                // Dejar el primero abierto por defecto
+                const isActive = idx === 0 ? 'active' : '';
+
+                return `
+                    <div class="accordion-group ${isActive}" id="group-${idx}">
+                        <div class="accordion-header" onclick="toggleAccordion('group-${idx}')">
+                            <h4>📅 ${formattedDate} <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.7;">(${photosCount} fotos)</span></h4>
+                            <span class="arrow">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px;">
+                                ${grouped[date].map(img => `
+                                    <div class="image-preview">
+                                        <img src="${img.src}" alt="Foto" loading="lazy">
+                                        <button class="delete-btn" onclick="deleteImage('${img.src}', '${img.type}', ${img.originalIndex ?? -1})">×</button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleAccordion(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.toggle('active');
+            }
+        }
+
+        // Delete image
+        async function deleteImage(src, type, localIndex) {
+            if (!confirm('¿Estás seguro de eliminar esta foto?')) return;
+
+            if (type === 'server') {
+                try {
+                    const res = await fetch('http://localhost:3000/delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ src })
+                    });
+
+                    if (res.ok) {
+                        showStatus('photoStatus', '✅ Foto eliminada del disco.', 'success');
+                        // No podemos recargar imágenes-data.js dinámicamente fácil aquí,
+                        // así que forzamos un reload suave o simplemente ocultamos
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        const err = await res.json();
+                        showStatus('photoStatus', '❌ Error al borrar: ' + err.message, 'error');
+                    }
+                } catch (err) {
+                    showStatus('photoStatus', '❌ Servidor no disponible para borrar.', 'error');
+                }
+            } else {
+                const images = JSON.parse(localStorage.getItem(STORAGE_KEYS.images) || '[]');
+                images.splice(localIndex, 1);
+                localStorage.setItem(STORAGE_KEYS.images, JSON.stringify(images));
+                showStatus('photoStatus', '✅ Foto eliminada de la memoria local.', 'success');
+                loadImages();
+            }
+        }
+
+        // View main page
+        document.getElementById('viewMainPage').addEventListener('click', () => {
+            window.open('index.html', '_blank');
+        });
+
+        // Export config
+        document.getElementById('exportConfig').addEventListener('click', () => {
+            const config = {
+                startDate: localStorage.getItem(STORAGE_KEYS.startDate),
+                victoryMessage: localStorage.getItem(STORAGE_KEYS.victoryMessage),
+                imagesCount: JSON.parse(localStorage.getItem(STORAGE_KEYS.images) || '[]').length
+            };
+
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'config-backup.json';
+            a.click();
+        });
+
+        // Clear all
+        document.getElementById('clearAll').addEventListener('click', () => {
+            if (!confirm('⚠️ ¿Estás seguro? Esto eliminará TODAS las fotos y configuraciones.')) return;
+            if (!confirm('⚠️⚠️ ÚLTIMA CONFIRMACIÓN: ¿Realmente quieres eliminar todo?')) return;
+
+            localStorage.removeItem(STORAGE_KEYS.startDate);
+            localStorage.removeItem(STORAGE_KEYS.victoryMessage);
+            localStorage.removeItem(STORAGE_KEYS.images);
+
+            location.reload();
+        });
+
+        // Show status message
+        function showStatus(elementId, message, type) {
+            const statusEl = document.getElementById(elementId);
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            statusEl.style.display = 'block';
+
+            setTimeout(() => {
+                statusEl.classList.remove('success', 'error', 'info');
+                statusEl.style.display = 'none';
+            }, 5000);
+        }
+
+        // Initialize
+        loadConfig();
+
+        // Update date preview every second if a date is set
+        setInterval(() => {
+            if (document.getElementById('relationshipStartDate').value) {
+                updateDatePreview();
+            }
+        }, 1000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Un año y un mes de amor - Nuestro viaje por Europa">
+    <title>Un Año y Un Mes Juntos ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Background Elements -->
+    <div class="background-gradient"></div>
+    <div class="stars"></div>
+    <div id="floatingHearts" class="floating-hearts-container"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="title">Un Año y Un Mes de Amor</h1>
+            <p class="subtitle">Nuestro viaje por Europa - Celebrando cada momento juntos</p>
+            <div class="date-badge">
+                <span class="badge-icon" id="secretTrigger" title="✨">❤️</span>
+                <span class="badge-text">Desde el inicio hasta ahora. Feliz Mesiversario, mi pequeña.</span>
+            </div>
+            <!-- Real-time Relationship Counter -->
+            <div class="relationship-counter" id="relationshipCounter">
+                <div class="counter-label">Llevamos juntos:</div>
+                <div class="counter-display" id="counterDisplay">
+                    <span class="counter-loading">⏱️ Configurar fecha...</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Canvas para las imágenes -->
+    <div id="canvas" class="canvas">
+        <!-- Las imágenes se agregarán aquí dinámicamente -->
+    </div>
+
+
+
+
+
+    <!-- Modal del Juego de Memoria -->
+    <div id="gameModal" class="modal game-modal">
+        <div class="game-container">
+            <div class="game-header">
+                <h2 class="game-title">💝 Juego de Memoria del Amor</h2>
+                <div class="game-stats">
+                    <span class="stat-item">Movimientos: <strong id="movesCount">0</strong></span>
+                    <span class="stat-item">Parejas: <strong id="pairsCount">0</strong>/8</span>
+                </div>
+                <button class="close-btn" id="closeGame">&times;</button>
+            </div>
+            <div class="game-board" id="gameBoard">
+                <!-- Las cartas se generarán dinámicamente -->
+            </div>
+            <div class="game-footer">
+                <button class="btn btn-secondary" id="restartGame">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <polyline points="1 20 1 14 7 14"></polyline>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    Reiniciar Juego
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Victoria -->
+    <div id="victoryModal" class="modal victory-modal">
+        <div class="victory-content">
+            <div class="victory-animation">
+                <div class="victory-hearts">
+                    <span>💕</span>
+                    <span>❤️</span>
+                    <span>💖</span>
+                    <span>💝</span>
+                    <span>💗</span>
+                </div>
+            </div>
+            <h2 class="victory-title">¡Felicidades!</h2>
+            <p class="victory-message" id="victoryMessageText">¡Ganaste, mi amor! Cada momento contigo es una victoria
+                ❤️</p>
+            <div class="victory-stats">
+                <p>Completaste el juego en <strong id="finalMoves">0</strong> movimientos</p>
+            </div>
+            <div class="victory-buttons">
+                <button class="btn btn-primary" id="playAgain">Jugar de Nuevo</button>
+                <button class="btn btn-secondary" id="closeVictory">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close" id="lightboxClose">&times;</button>
+        <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
+        <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
+        <img id="lightboxImg" src="" alt="Vista ampliada">
+        <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
+    </div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+    <!-- Cursor Trail Container -->
+    <div id="cursorTrail" class="cursor-trail"></div>
+
+    <!-- Music Control Button -->
+    <button id="musicToggle" class="music-toggle" title="Música de fondo">
+        <svg class="music-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+        <span class="music-status">🔇</span>
+    </button>
+    <!-- YouTube Player (Hidden but with minimal size to allow loading) -->
+    <!-- Floating SoundCloud Player -->
+    <div id="musicPlayer" class="floating-player">
+        <div class="player-header" id="playerDragHandle">
+            <span class="player-title">🎵 Reproductor</span>
+            <button id="minimizePlayer" class="player-btn small" title="Minimizar">−</button>
+        </div>
+        <div class="player-content">
+            <div id="currentTrackInfo" class="track-info">Cargando música...</div>
+
+            <!-- Progress Bar -->
+            <div class="player-progress-container">
+                <input type="range" id="trackSeekBar" class="track-seekbar" value="0" step="1" min="0" max="100">
+                <div class="time-display">
+                    <span id="currentTime">00:00</span>
+                    <span id="totalDuration">00:00</span>
+                </div>
+            </div>
+
+            <div class="player-controls">
+                <button id="prevTrack" class="player-btn" title="Anterior">⏮</button>
+                <button id="playPauseTrack" class="player-btn large" title="Reproducir/Pausa">▶</button>
+                <button id="nextTrack" class="player-btn" title="Siguiente">⏭</button>
+                <button id="togglePlaylist" class="player-btn" title="Ver Lista">📜</button>
+            </div>
+
+            <!-- Playlist Viewer -->
+            <div id="playerPlaylist" class="player-playlist">
+                <!-- Se poblará dinámicamente -->
+            </div>
+            <!-- Iframe oculto para el SDK -->
+            <iframe id="scPlayer" width="100%" height="100" scrolling="no" frameborder="no" allow="autoplay" src=""
+                style="display:none;"></iframe>
+        </div>
+    </div>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Creado con ❤️ para celebrar nuestro amor</p>
+    </footer>
+
+    <script src="images-data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
