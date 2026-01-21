@@ -663,12 +663,11 @@ function loadTrack(index) {
     currentTrackIndex = index;
     const iframe = document.getElementById('scPlayer');
     const url = appPlaylist[currentTrackIndex];
-    const encodedUrl = encodeURIComponent(url);
 
     // Si ya existe el widget, cargamos la nueva URL, si no, inicializamos
     if (scWidget) {
         scWidget.load(url, {
-            auto_play: isMusicPlaying,
+            auto_play: true, // Forzamos true para que empiece al cargar
             hide_related: true,
             show_comments: false,
             show_user: false,
@@ -677,7 +676,8 @@ function loadTrack(index) {
             visual: false
         });
     } else {
-        iframe.src = `https://w.soundcloud.com/player/?url=${encodedUrl}&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`;
+        const encodedUrl = encodeURIComponent(url);
+        iframe.src = `https://w.soundcloud.com/player/?url=${encodedUrl}&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`;
         scWidget = SC.Widget(iframe);
         setupWidgetEvents();
     }
@@ -688,11 +688,20 @@ function loadTrack(index) {
 function setupWidgetEvents() {
     scWidget.bind(SC.Widget.Events.READY, () => {
         isPlayerReady = true;
-        // Obtener duración cada vez que el widget carga una pista nueva
         refreshDuration();
 
-        if (localStorage.getItem(MUSIC_STATE_KEY) === 'true') {
+        // Intentar reproducir si no hay estado previo o si el estado es true
+        const musicState = localStorage.getItem(MUSIC_STATE_KEY);
+        if (musicState === 'true' || musicState === null) {
             scWidget.play();
+            // Listener para el primer clic (bypass autoplay block)
+            const handleFirstInteraction = () => {
+                if (!isMusicPlaying) scWidget.play();
+                document.removeEventListener('click', handleFirstInteraction);
+                document.removeEventListener('touchstart', handleFirstInteraction);
+            };
+            document.addEventListener('click', handleFirstInteraction);
+            document.addEventListener('touchstart', handleFirstInteraction);
         }
     });
 
